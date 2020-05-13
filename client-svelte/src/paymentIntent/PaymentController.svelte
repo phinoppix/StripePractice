@@ -6,8 +6,9 @@
   import * as svc from '../service';
   import * as cache from '../cache';
   import InlineAlert from '../common/InlineAlert.svelte';
+  import {appEnv} from '../appEnv';
 
-  const stripe = new Stripe('');
+  const stripe = new Stripe(appEnv.stripe_public_key);
 
   let nextStep = PAYMENT_FLOW.PRE_CHECKOUT;
   let errorType = '', errorMessage = '';

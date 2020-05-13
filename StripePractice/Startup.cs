@@ -21,6 +21,7 @@ namespace StripePractice
     public Startup(IConfiguration configuration)
     {
       Configuration = configuration;
+      StripeConfiguration.ApiKey = configuration["stripe:api_key"];
     }
 
     public IConfiguration Configuration { get; }
@@ -60,8 +61,6 @@ namespace StripePractice
       {
         endpoints.MapControllers();
       });
-
-      StripeConfiguration.ApiKey = StripeConfig.ApiKey;
     }
   }
 }
