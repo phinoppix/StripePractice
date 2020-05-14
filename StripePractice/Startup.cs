@@ -22,6 +22,7 @@ namespace StripePractice
     {
       Configuration = configuration;
       StripeConfiguration.ApiKey = configuration["stripe:api_key"];
+      AppConfig.config = configuration;
     }
 
     public IConfiguration Configuration { get; }

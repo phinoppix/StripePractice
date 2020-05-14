@@ -1,6 +1,7 @@
 import * as cache from './cache';
+import {appEnv} from './appEnv';
 
-const GATEWAY_SERVER_URL = 'https://localhost:5001';
+const GATEWAY_SERVER_URL = appEnv.backend_url;
 const GATEWAY_SERVER_URL_INIT = GATEWAY_SERVER_URL + '/api/payment/init';
 
 const DEFAULT_PAYMENT_POST_PARAMS = {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
@@ -47,6 +48,35 @@ namespace StripePractice.Controllers
           { "paymentIntent", intent.ToJson()}
         }
       };
+    }
+
+    [HttpPost("webhook")]
+    public async Task<IActionResult> StripeWebhook()
+    {
+      var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+
+      try
+      {
+        
+        var stripeEvent = EventUtility.ConstructEvent(json,
+                    Request.Headers["Stripe-Signature"], AppConfig.WebhookKey, throwOnApiVersionMismatch: true);
+
+        if (stripeEvent.Type == Events.PaymentIntentSucceeded)
+        {
+          var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
+          Console.WriteLine("PaymentIntent was successful.");
+        } else if(stripeEvent.Type == Events.PaymentMethodAttached)
+        {
+          var paymentMethod = stripeEvent.Data.Object as PaymentMethod;
+          Console.WriteLine("PaymentMethod was attached to Customer.");
+        }
+        return Ok();
+      }
+      catch(Exception e)
+      {
+        Console.WriteLine("Event hook error:" + e.ToString());
+        return BadRequest();
+      }
     }
 
     [HttpGet("get_session/{id}")]
